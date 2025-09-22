@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integra Studio - Maintenance Status</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #64ffda;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .status-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .status-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+        }
+        
+        .operational {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+        
+        .maintenance {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+        }
+        
+        .outage {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+        
+        .status-details {
+            margin-top: 1rem;
+        }
+        
+        .update-time {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+            display: block;
+        }
+        
+        .incidents {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 3rem;
+            animation: slideUp 1s ease-out;
+        }
+        
+        .incidents h2 {
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .incident-list {
+            list-style: none;
+        }
+        
+        .incident-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .incident-item:last-child {
+            border-bottom: none;
+        }
+        
+        .incident-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .incident-date {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .incident-desc {
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .maintenance-info {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1.2s ease-out;
+        }
+        
+        .maintenance-info h2 {
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            font-size: 1.8rem;
+            color: #64ffda;
+        }
+        
+        .maintenance-info p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        
+        .progress {
+            height: 100%;
+            width: 75%;
+            background: linear-gradient(90deg, #64ffda, #00bcd4);
+            border-radius: 4px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: auto;
+            padding: 2rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .status-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .logo {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-infinity"></i>
+            </div>
+            <h1>Integra Studio</h1>
+            <p class="subtitle">Maintenance Status Dashboard - Real-time information about our services and systems</p>
+        </header>
+        
+        <div class="maintenance-info">
+            <h2><i class="fas fa-check-circle"></i> Operational Status</h2>
+            <p>The Core API, database cluster, and file storage are all operational.</p>            
+        </div>
+        
+        <div class="status-container">
+            <div class="status-card">
+                <div class="status-header">
+                    <h3 class="status-title">API Services</h3>
+                    <span class="status-indicator operational"><i class="fas fa-check-circle"></i> Operational</span>
+                </div>
+                <p>Core API endpoints and authentication services</p>
+                <span class="update-time"></span>
+            </div>
+            
+            <div class="status-card">
+                <div class="status-header">
+                    <h3 class="status-title">Web Application</h3>
+                    <span class="status-indicator operational"><i class="fas fa-check-circle"></i> Operational</span>
+                </div>
+                <p>Main dashboard and project management tools</p>
+                <span class="update-time"></span>
+            </div>
+            
+            <div class="status-card">
+                <div class="status-header">
+                    <h3 class="status-title">Database</h3>
+                    <span class="status-indicator operational"><i class="fas fa-check-circle"></i> Operational</span>
+                </div>
+                <p>Primary and replica database clusters</p>
+                <span class="update-time"></span>
+            </div>
+            
+            <div class="status-card">
+                <div class="status-header">
+                    <h3 class="status-title">File Storage</h3>
+                    <span class="status-indicator operational"><i class="fas fa-check-circle"></i> Operational</span>
+                </div>
+                <p>File uploads, storage and delivery services</p>
+                <span class="update-time"></span>
+            </div>
+        </div>        
+    </div>
+    
+    <footer>
+        <p>© 2023 Integra Studio. All rights reserved.</p>
+        <p>Status page powered by Integra Monitoring System</p>
+    </footer>
+</body>
+</html>
